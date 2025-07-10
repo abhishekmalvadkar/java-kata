@@ -1,4 +1,4 @@
-package com.amalvadkar.jk.scm;
+package com.amalvadkar.jk.scm.repository;
 
 import com.amalvadkar.jk.common.AbstractUT;
 import org.junit.jupiter.api.Test;
@@ -12,16 +12,16 @@ public class RepositoryStoreTest extends AbstractUT {
         String repoName = "java-kata";
         String repoDescription = "Java Kata Practices";
         String username = "abhishekmalvadkar";
-        Repository repository = new Repository(repoName, repoDescription, username);
+        Repository repository = new Repository(repoName, repoDescription, Username.of(username));
         RepositoryStore.add(repository);
-        long totalRepo = RepositoryStore.totalReposOf(username);
+        long totalRepo = RepositoryStore.totalReposOf(Username.of(username));
         assertThat(totalRepo).isOne();
     }
 
     @Test
     void should_return_total_repo_zero_if_user_does_not_have_any_repo() {
         String username = "xyz";
-        long totalRepo = RepositoryStore.totalReposOf(username);
+        long totalRepo = RepositoryStore.totalReposOf(Username.of(username));
         assertThat(totalRepo).isZero();
     }
 }
