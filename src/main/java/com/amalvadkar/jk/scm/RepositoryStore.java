@@ -7,25 +7,21 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RepositoryStore {
 
-    private static final Map<String, List<Repository>> USER_NAME_TO_REPOS
+    private static final Map<String, List<Repository>> USER_NAME_TO_REPOS_MAP
             = new ConcurrentHashMap<>();
 
-    public static void add(Repository newGithubrepo) {
-        List<Repository> repositories = USER_NAME_TO_REPOS.get(newGithubrepo.username());
-        if (repositories == null) {
-            repositories = new ArrayList<>();
-            repositories.add(newGithubrepo);
-            USER_NAME_TO_REPOS.put(newGithubrepo.username(), repositories);
-        } else {
-            repositories.add(newGithubrepo);
-        }
+    public static void add(Repository newRepo) {
+        List<Repository> userRepos = findReposOf(newRepo.username());
+        userRepos.add(newRepo);
+        USER_NAME_TO_REPOS_MAP.put(newRepo.username(), userRepos);
     }
 
-    public static long totalRepoOf(String username) {
-        List<Repository> repositories = USER_NAME_TO_REPOS.get(username);
-        if (repositories == null) {
-            return 0;
-        }
-        return repositories.size();
+    private static List<Repository> findReposOf(String username) {
+        return USER_NAME_TO_REPOS_MAP.getOrDefault(username, new ArrayList<>());
+    }
+
+    public static long totalReposOf(String username) {
+        List<Repository> userRepos = findReposOf(username);
+        return userRepos.size();
     }
 }

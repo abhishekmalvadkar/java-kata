@@ -14,14 +14,14 @@ public class RepositoryStoreTest extends AbstractUT {
         String username = "abhishekmalvadkar";
         Repository repository = new Repository(repoName, repoDescription, username);
         RepositoryStore.add(repository);
-        long totalRepo = RepositoryStore.totalRepoOf(username);
+        long totalRepo = RepositoryStore.totalReposOf(username);
         assertThat(totalRepo).isOne();
     }
 
     @Test
     void should_return_total_repo_zero_if_user_does_not_have_any_repo() {
         String username = "xyz";
-        long totalRepo = RepositoryStore.totalRepoOf(username);
+        long totalRepo = RepositoryStore.totalReposOf(username);
         assertThat(totalRepo).isZero();
     }
 }
