@@ -3,6 +3,7 @@ package com.amalvadkar.jk.scm.repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RepositoryStore {
@@ -23,5 +24,13 @@ public class RepositoryStore {
     public static long totalReposOf(Username username) {
         List<Repository> userRepos = findReposOf(username);
         return userRepos.size();
+    }
+
+    public static Optional<Repository> findRepoByNameFor(Username username) {
+        return Optional.empty();
+    }
+
+    public static void clear() {
+        USER_NAME_TO_REPOS_MAP.clear();
     }
 }
