@@ -52,6 +52,16 @@ public class RepositoryStoreTest extends AbstractUT {
         assertThatRepo(actualRepo, repository);
     }
 
+    @Test
+    void should_return_empty_if_asked_repo_username_does_not_have() {
+        String repoName = "java-kata";
+        Username username = Username.of("abhishekmalvadkar");
+
+        Optional<Repository> userRepo = RepositoryStore.findRepoByNameForGivenUsername(repoName, username);
+
+        assertThat(userRepo).isEmpty();
+    }
+
     private static void assertThatRepo(Repository actualRepo, Repository expectedRepo) {
         assertThat(actualRepo.name()).isEqualTo(expectedRepo.name());
         assertThat(actualRepo.description()).isEqualTo(expectedRepo.description());

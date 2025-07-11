@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
 public class RepositoryStore {
 
@@ -29,8 +30,12 @@ public class RepositoryStore {
     public static Optional<Repository> findRepoByNameForGivenUsername(String repoName, Username username) {
         List<Repository> userRepos = findReposOf(username);
         return userRepos.stream()
-                .filter(repository -> repoName.equals(repository.name()))
+                .filter(by(repoName))
                 .findFirst();
+    }
+
+    private static Predicate<Repository> by(String repoName) {
+        return repo -> repoName.equals(repo.name());
     }
 
     public static void clear() {
