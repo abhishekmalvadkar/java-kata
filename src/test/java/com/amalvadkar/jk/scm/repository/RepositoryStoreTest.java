@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
+import static com.amalvadkar.jk.scm.repository.RepositoryStore.totalReposOf;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class RepositoryStoreTest extends AbstractUT {
 
@@ -16,14 +18,14 @@ public class RepositoryStoreTest extends AbstractUT {
     }
 
     @Test
-    void should_create_new_github_repo() {
+    void should_create_new_repo_for_given_user() {
         String repoName = "java-kata";
         String repoDescription = "Java Kata Practices";
         Username username = Username.of("abhishekmalvadkar");
         Repository repository = new Repository(repoName, repoDescription, username);
         RepositoryStore.add(repository);
 
-        long totalRepo = RepositoryStore.totalReposOf(username);
+        long totalRepo = totalReposOf(username);
 
         assertThat(totalRepo).isOne();
     }
@@ -32,7 +34,7 @@ public class RepositoryStoreTest extends AbstractUT {
     void should_return_total_repo_zero_if_user_does_not_have_any_repo() {
         Username username = Username.of("xyz");
 
-        long totalRepo = RepositoryStore.totalReposOf(username);
+        long totalRepo = totalReposOf(username);
 
         assertThat(totalRepo).isZero();
     }
@@ -60,6 +62,26 @@ public class RepositoryStoreTest extends AbstractUT {
         Optional<Repository> userRepo = RepositoryStore.findRepoByNameForGivenUsername(repoName, username);
 
         assertThat(userRepo).isEmpty();
+    }
+
+    @Test
+    void should_throw_exception_with_message_repo_already_exists_if_user_try_to_create_repo_with_same_name() {
+        String repoName = "java-kata";
+        String repoDescription = "Java Kata Practices";
+        Username username = Username.of("abhishekmalvadkar");
+        Repository repository = new Repository(repoName, repoDescription, username);
+        RepositoryStore.add(repository);
+
+        String anotherRepoName = "java-kata";
+        String anotherRepoDescription = "Java Kata Practices Another";
+        Repository anotherRepo = new Repository(anotherRepoName, anotherRepoDescription, username);
+
+        assertThatThrownBy(() -> RepositoryStore.add(anotherRepo))
+                .isInstanceOf(RepoAlreadyExistsException.class)
+                .hasMessage("Repo already exists with given name");
+
+        assertThat(totalReposOf(username)).isOne();
+
     }
 
     private static void assertThatRepo(Repository actualRepo, Repository expectedRepo) {
