@@ -26,8 +26,11 @@ public class RepositoryStore {
         return userRepos.size();
     }
 
-    public static Optional<Repository> findRepoByNameFor(Username username) {
-        return Optional.empty();
+    public static Optional<Repository> findRepoByNameForGivenUsername(String repoName, Username username) {
+        List<Repository> userRepos = findReposOf(username);
+        return userRepos.stream()
+                .filter(repository -> repoName.equals(repository.name()))
+                .findFirst();
     }
 
     public static void clear() {

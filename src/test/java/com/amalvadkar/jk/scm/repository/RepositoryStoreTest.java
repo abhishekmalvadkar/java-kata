@@ -45,16 +45,16 @@ public class RepositoryStoreTest extends AbstractUT {
         Repository repository = new Repository(repoName, repoDescription, username);
         RepositoryStore.add(repository);
 
-        Optional<Repository> userRepo = RepositoryStore.findRepoByNameFor(username);
+        Optional<Repository> userRepo = RepositoryStore.findRepoByNameForGivenUsername(repoName, username);
 
         assertThat(userRepo).isPresent();
         Repository actualRepo = userRepo.get();
         assertThatRepo(actualRepo, repository);
     }
 
-    private static void assertThatRepo(Repository actualRepo, Repository expected) {
-        assertThat(actualRepo.name()).isEqualTo(expected.username());
-        assertThat(actualRepo.description()).isEqualTo(expected.description());
-        assertThat(actualRepo.username()).isEqualTo(expected.username());
+    private static void assertThatRepo(Repository actualRepo, Repository expectedRepo) {
+        assertThat(actualRepo.name()).isEqualTo(expectedRepo.name());
+        assertThat(actualRepo.description()).isEqualTo(expectedRepo.description());
+        assertThat(actualRepo.username()).isEqualTo(expectedRepo.username());
     }
 }
