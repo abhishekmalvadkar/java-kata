@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
+import static com.amalvadkar.jk.scm.repository.RepositoryStore.findRepoByNameForGivenUsername;
 import static com.amalvadkar.jk.scm.repository.RepositoryStore.totalReposOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -47,7 +48,7 @@ public class RepositoryStoreTest extends AbstractUT {
         Repository repository = new Repository(repoName, repoDescription, username);
         RepositoryStore.add(repository);
 
-        Optional<Repository> userRepo = RepositoryStore.findRepoByNameForGivenUsername(repoName, username);
+        Optional<Repository> userRepo = findRepoByNameForGivenUsername(repoName, username);
 
         assertThat(userRepo).isPresent();
         Repository actualRepo = userRepo.get();
@@ -59,7 +60,7 @@ public class RepositoryStoreTest extends AbstractUT {
         String repoName = "java-kata";
         Username username = Username.of("abhishekmalvadkar");
 
-        Optional<Repository> userRepo = RepositoryStore.findRepoByNameForGivenUsername(repoName, username);
+        Optional<Repository> userRepo = findRepoByNameForGivenUsername(repoName, username);
 
         assertThat(userRepo).isEmpty();
     }
@@ -80,6 +81,24 @@ public class RepositoryStoreTest extends AbstractUT {
                 .isInstanceOf(RepoAlreadyExistsException.class)
                 .hasMessage("Repo already exists with given name");
 
+        assertThat(totalReposOf(username)).isOne();
+
+    }
+
+    @Test
+    void should_rename_existing_repo() {
+        String repoName = "java-kata";
+        String repoDescription = "Java Kata Practices";
+        Username username = Username.of("abhishekmalvadkar");
+        Repository repository = new Repository(repoName, repoDescription, username);
+        RepositoryStore.add(repository);
+
+        String newRepoName = "java-kata-practices";
+        RepositoryStore.rename(repoName, newRepoName, username);
+
+        assertThat(findRepoByNameForGivenUsername(repoName, username)).isEmpty();
+        Optional<Repository> renamedRepoOpt = findRepoByNameForGivenUsername(newRepoName, username);
+        assertThat(renamedRepoOpt).isPresent();
         assertThat(totalReposOf(username)).isOne();
 
     }

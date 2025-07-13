@@ -57,4 +57,8 @@ public class RepositoryStore {
             throw RepoAlreadyExistsException.instance();
         }
     }
+
+    public static void rename(String oldRepoName, String newRepoName, Username username) {
+
+    }
 }
