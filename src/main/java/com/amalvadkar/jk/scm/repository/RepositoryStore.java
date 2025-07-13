@@ -19,10 +19,20 @@ public class RepositoryStore {
         USER_NAME_TO_REPOS_MAP.put(newRepo.username(), userRepos);
     }
 
-    private static void checkForRepoNameExists(Repository newRepo, List<Repository> userRepos) {
-        if (userHasRepoWithSameName(newRepo, userRepos)) {
-            throw RepoAlreadyExistsException.instance();
-        }
+    public static Optional<Repository> findRepoByNameForGivenUsername(String repoName, Username username) {
+        List<Repository> userRepos = findReposOf(username);
+        return userRepos.stream()
+                .filter(by(repoName))
+                .findFirst();
+    }
+
+    public static long totalReposOf(Username username) {
+        List<Repository> userRepos = findReposOf(username);
+        return userRepos.size();
+    }
+
+    public static void clear() {
+        USER_NAME_TO_REPOS_MAP.clear();
     }
 
     private static boolean userHasRepoWithSameName(Repository newRepo, List<Repository> userRepos) {
@@ -38,23 +48,13 @@ public class RepositoryStore {
         return USER_NAME_TO_REPOS_MAP.getOrDefault(username, new ArrayList<>());
     }
 
-    public static long totalReposOf(Username username) {
-        List<Repository> userRepos = findReposOf(username);
-        return userRepos.size();
-    }
-
-    public static Optional<Repository> findRepoByNameForGivenUsername(String repoName, Username username) {
-        List<Repository> userRepos = findReposOf(username);
-        return userRepos.stream()
-                .filter(by(repoName))
-                .findFirst();
-    }
-
     private static Predicate<Repository> by(String repoName) {
         return repo -> repoName.equals(repo.name());
     }
 
-    public static void clear() {
-        USER_NAME_TO_REPOS_MAP.clear();
+    private static void checkForRepoNameExists(Repository newRepo, List<Repository> userRepos) {
+        if (userHasRepoWithSameName(newRepo, userRepos)) {
+            throw RepoAlreadyExistsException.instance();
+        }
     }
 }
