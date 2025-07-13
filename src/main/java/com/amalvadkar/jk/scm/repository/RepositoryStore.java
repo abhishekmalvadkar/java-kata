@@ -14,8 +14,24 @@ public class RepositoryStore {
 
     public static void add(Repository newRepo) {
         List<Repository> userRepos = findReposOf(newRepo.username());
+        checkForRepoNameExists(newRepo, userRepos);
         userRepos.add(newRepo);
         USER_NAME_TO_REPOS_MAP.put(newRepo.username(), userRepos);
+    }
+
+    private static void checkForRepoNameExists(Repository newRepo, List<Repository> userRepos) {
+        if (userHasRepoWithSameName(newRepo, userRepos)) {
+            throw RepoAlreadyExistsException.instance();
+        }
+    }
+
+    private static boolean userHasRepoWithSameName(Repository newRepo, List<Repository> userRepos) {
+        return userRepos.stream()
+                .anyMatch(withNameOf(newRepo));
+    }
+
+    private static Predicate<Repository> withNameOf(Repository newRepo) {
+        return repo -> repo.name().equals(newRepo.name());
     }
 
     private static List<Repository> findReposOf(Username username) {
