@@ -103,6 +103,22 @@ public class RepositoryStoreTest extends AbstractUT {
 
     }
 
+    @Test
+    void should_throw_excpetion_that_repo_does_not_exists_id_passed_invalid_existing_repo_name_during_rename_existing_repo() {
+        String repoName = "java-kata";
+        String repoDescription = "Java Kata Practices";
+        Username username = Username.of("abhishekmalvadkar");
+        Repository repository = new Repository(repoName, repoDescription, username);
+        RepositoryStore.add(repository);
+
+        String newRepoName = "java-kata-practices";
+        String existingRepoName = "java-kata-list";
+        assertThatThrownBy(() -> RepositoryStore.rename(existingRepoName, newRepoName, username))
+                .isInstanceOf(RepoDoesNotExistsException.class)
+                .hasMessage("repo does not exists");
+
+    }
+
     private static void assertThatRepo(Repository actualRepo, Repository expectedRepo) {
         assertThat(actualRepo.name()).isEqualTo(expectedRepo.name());
         assertThat(actualRepo.description()).isEqualTo(expectedRepo.description());
