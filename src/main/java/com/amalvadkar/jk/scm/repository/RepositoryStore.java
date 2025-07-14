@@ -26,6 +26,18 @@ public class RepositoryStore {
                 .findFirst();
     }
 
+    public static void rename(String oldRepoName, String newRepoName, Username username) {
+        Optional<Repository> oldRepoOpt = findRepoByNameForGivenUsername(oldRepoName, username);
+        List<Repository> userRepos = findReposOf(username);
+        if (oldRepoOpt.isPresent()) {
+            Repository oldRepo = oldRepoOpt.get();
+            userRepos.remove(oldRepo);
+            Repository renamedRepo = oldRepo.withNewName(newRepoName);
+            userRepos.add(renamedRepo);
+            USER_NAME_TO_REPOS_MAP.put(username, userRepos);
+        }
+    }
+
     public static long totalReposOf(Username username) {
         List<Repository> userRepos = findReposOf(username);
         return userRepos.size();
@@ -55,18 +67,6 @@ public class RepositoryStore {
     private static void checkForRepoNameExists(Repository newRepo, List<Repository> userRepos) {
         if (userHasRepoWithSameName(newRepo, userRepos)) {
             throw RepoAlreadyExistsException.instance();
-        }
-    }
-
-    public static void rename(String oldRepoName, String newRepoName, Username username) {
-        Optional<Repository> oldRepoOpt = findRepoByNameForGivenUsername(oldRepoName, username);
-        List<Repository> userRepos = findReposOf(username);
-        if (oldRepoOpt.isPresent()) {
-            Repository oldRepo = oldRepoOpt.get();
-            userRepos.remove(oldRepo);
-            Repository renamedRepo = oldRepo.withNewName(newRepoName);
-            userRepos.add(renamedRepo);
-            USER_NAME_TO_REPOS_MAP.put(username, userRepos);
         }
     }
 }
