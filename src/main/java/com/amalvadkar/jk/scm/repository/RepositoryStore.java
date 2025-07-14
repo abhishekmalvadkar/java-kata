@@ -59,6 +59,14 @@ public class RepositoryStore {
     }
 
     public static void rename(String oldRepoName, String newRepoName, Username username) {
-
+        Optional<Repository> oldRepoOpt = findRepoByNameForGivenUsername(oldRepoName, username);
+        List<Repository> userRepos = findReposOf(username);
+        if (oldRepoOpt.isPresent()) {
+            Repository oldRepo = oldRepoOpt.get();
+            userRepos.remove(oldRepo);
+            Repository renamedRepo = oldRepo.withNewName(newRepoName);
+            userRepos.add(renamedRepo);
+            USER_NAME_TO_REPOS_MAP.put(username, userRepos);
+        }
     }
 }
