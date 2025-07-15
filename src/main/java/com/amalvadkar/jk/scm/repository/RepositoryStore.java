@@ -27,13 +27,17 @@ public class RepositoryStore {
     }
 
     public static void rename(String oldRepoName, String newRepoName, Username username) {
-        Repository oldRepo = findRepoByNameForGivenUsername(oldRepoName, username)
-                .orElseThrow(() -> new RepoDoesNotExistsException("repo does not exists"));
+        Repository oldRepo = findRepoByNameOrThrow(oldRepoName, username);
         List<Repository> userRepos = findReposOf(username);
         userRepos.remove(oldRepo);
         Repository renamedRepo = oldRepo.withNewName(newRepoName);
         userRepos.add(renamedRepo);
         USER_NAME_TO_REPOS_MAP.put(username, userRepos);
+    }
+
+    private static Repository findRepoByNameOrThrow(String oldRepoName, Username username) {
+        return findRepoByNameForGivenUsername(oldRepoName, username)
+                .orElseThrow(RepoDoesNotExistsException::new);
     }
 
     public static long totalReposOf(Username username) {
