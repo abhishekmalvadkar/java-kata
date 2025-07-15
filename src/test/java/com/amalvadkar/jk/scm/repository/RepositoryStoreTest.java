@@ -119,6 +119,20 @@ public class RepositoryStoreTest extends AbstractUT {
 
     }
 
+    @Test
+    void should_delete_repo() {
+        String repoName = "java-kata";
+        String repoDescription = "Java Kata Practices";
+        Username username = Username.of("abhishekmalvadkar");
+        Repository repository = new Repository(repoName, repoDescription, username);
+        RepositoryStore.add(repository);
+        assertThat(totalReposOf(username)).isOne();
+
+        RepositoryStore.delete(repository, username);
+
+        assertThat(totalReposOf(username)).isZero();
+    }
+
     private static void assertThatRepo(Repository actualRepo, Repository expectedRepo) {
         assertThat(actualRepo.name()).isEqualTo(expectedRepo.name());
         assertThat(actualRepo.description()).isEqualTo(expectedRepo.description());

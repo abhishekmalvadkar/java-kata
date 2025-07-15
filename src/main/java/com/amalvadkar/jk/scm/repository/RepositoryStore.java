@@ -71,4 +71,8 @@ public class RepositoryStore {
             throw RepoAlreadyExistsException.instance();
         }
     }
+
+    public static void delete(Repository repository, Username username) {
+
+    }
 }
