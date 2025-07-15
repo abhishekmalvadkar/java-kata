@@ -35,9 +35,8 @@ public class RepositoryStore {
         USER_NAME_TO_REPOS_MAP.put(username, userRepos);
     }
 
-    private static Repository findRepoByNameOrThrow(String oldRepoName, Username username) {
-        return findRepoByNameForGivenUsername(oldRepoName, username)
-                .orElseThrow(RepoDoesNotExistsException::new);
+    public static void delete(Repository repository, Username username) {
+
     }
 
     public static long totalReposOf(Username username) {
@@ -47,6 +46,11 @@ public class RepositoryStore {
 
     public static void clear() {
         USER_NAME_TO_REPOS_MAP.clear();
+    }
+
+    private static Repository findRepoByNameOrThrow(String oldRepoName, Username username) {
+        return findRepoByNameForGivenUsername(oldRepoName, username)
+                .orElseThrow(RepoDoesNotExistsException::new);
     }
 
     private static boolean userHasRepoWithSameName(Repository newRepo, List<Repository> userRepos) {
@@ -70,9 +74,5 @@ public class RepositoryStore {
         if (userHasRepoWithSameName(newRepo, userRepos)) {
             throw RepoAlreadyExistsException.instance();
         }
-    }
-
-    public static void delete(Repository repository, Username username) {
-
     }
 }
