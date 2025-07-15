@@ -5,4 +5,4 @@ Source Code Management Domain
 [X] Return total repo as zero if user does not have any repo
 [X] Return repo by name of given user
 [X] Rename existing repo of given user
-[ ] Throw exception with message repo does not exists if passed invalid old repo name when renaming existing repo
+[X] Throw exception with message repo does not exists if passed invalid old repo name when renaming existing repo
