@@ -35,8 +35,11 @@ public class RepositoryStore {
         USER_NAME_TO_REPOS_MAP.put(username, userRepos);
     }
 
-    public static void delete(Repository repository, Username username) {
-
+    public static void delete(String repoName, Username username) {
+        Repository repoToBeDeleted = findRepoByNameOrThrow(repoName, username);
+        List<Repository> userRepos = findReposOf(username);
+        userRepos.remove(repoToBeDeleted);
+        USER_NAME_TO_REPOS_MAP.put(username, userRepos);
     }
 
     public static long totalReposOf(Username username) {

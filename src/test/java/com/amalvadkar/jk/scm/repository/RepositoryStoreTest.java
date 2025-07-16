@@ -128,7 +128,7 @@ public class RepositoryStoreTest extends AbstractUT {
         RepositoryStore.add(repository);
         assertThat(totalReposOf(username)).isOne();
 
-        RepositoryStore.delete(repository, username);
+        RepositoryStore.delete(repoName, username);
 
         assertThat(totalReposOf(username)).isZero();
     }
