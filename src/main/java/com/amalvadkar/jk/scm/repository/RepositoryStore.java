@@ -78,4 +78,8 @@ public class RepositoryStore {
             throw RepoAlreadyExistsException.instance();
         }
     }
+
+    public static List<Repository> search(String searchText, Username username) {
+        return List.of();
+    }
 }

@@ -4,6 +4,7 @@ import com.amalvadkar.jk.common.AbstractUT;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.amalvadkar.jk.scm.repository.RepositoryStore.findRepoByNameForGivenUsername;
@@ -131,6 +132,47 @@ public class RepositoryStoreTest extends AbstractUT {
         RepositoryStore.delete(repoName, username);
 
         assertThat(totalReposOf(username)).isZero();
+    }
+
+    @Test
+    void should_return_list_of_repo_based_on_user_entered_search_text() {
+
+        Username username = Username.of("abhishekmalvadkar");
+        Repository repoOne = createRepo("java-kata",
+                "Java Kata Practices",
+                username);
+        RepositoryStore.add(repoOne);
+
+        Repository repoTwo = createRepo("sql-kata",
+                "SQL Kata Practices",
+                username);
+        RepositoryStore.add(repoTwo);
+
+        Repository repoThree = createRepo("spring-kata",
+                "Spring Kata Practices",
+                username);
+        RepositoryStore.add(repoThree);
+
+        Repository repoFour = createRepo("spring-boot--kata",
+                "Spring Boot Kata Practices",
+                username);
+        RepositoryStore.add(repoFour);
+
+        assertThat(totalReposOf(username)).isEqualTo(4);
+
+        String searchText = "spring";
+        List<Repository> searchedRepos = RepositoryStore.search(searchText, username);
+
+        assertThat(searchedRepos).hasSize(2);
+        assertThat(searchedRepos).extracting("name")
+                .containsExactlyInAnyOrder("spring-kata", "spring-boot--kata");
+        assertThat(searchedRepos).extracting("description")
+                .containsExactlyInAnyOrder("Spring Kata Practices", "Spring Boot Kata Practices");
+
+    }
+
+    private static Repository createRepo(String repoName, String repoDescription, Username username) {
+        return new Repository(repoName, repoDescription, username);
     }
 
     private static void assertThatRepo(Repository actualRepo, Repository expectedRepo) {

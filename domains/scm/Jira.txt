@@ -6,4 +6,5 @@ Source Code Management Domain
     [X] Return repo by name of given user
     [X] Rename existing repo of given user
     [X] Throw exception with message repo does not exists if passed invalid old repo name when renaming existing repo
->>  [ ] Delete repo
+    [X] Delete repo
+>>  [ ] Return repo list based on user entered search text
