@@ -135,7 +135,7 @@ public class RepositoryStoreTest extends AbstractUT {
     }
 
     @Test
-    void should_return_list_of_repo_if_repo_name_has_that_user_enetred_search_text() {
+    void should_return_list_of_repo_if_repo_name_has_that_user_entered_search_text() {
 
         Username username = Username.of("abhishekmalvadkar");
         Repository repoOne = createRepo("java-kata",
@@ -168,6 +168,44 @@ public class RepositoryStoreTest extends AbstractUT {
                 .containsExactlyInAnyOrder("spring-kata", "spring-boot--kata");
         assertThat(searchedRepos).extracting("description")
                 .containsExactlyInAnyOrder("Spring Kata Practices", "Spring Boot Kata Practices");
+
+    }
+
+    @Test
+    void should_return_list_of_repo_if_repo_description_has_that_user_entered_search_text() {
+
+        Username username = Username.of("abhishekmalvadkar");
+        Repository repoOne = createRepo("java-kata",
+                "Java Kata Practices for spring developer as well",
+                username);
+        RepositoryStore.add(repoOne);
+
+        Repository repoTwo = createRepo("sql-kata",
+                "SQL Kata Practices",
+                username);
+        RepositoryStore.add(repoTwo);
+
+        Repository repoThree = createRepo("spring-kata",
+                "Spring Kata Practices",
+                username);
+        RepositoryStore.add(repoThree);
+
+        Repository repoFour = createRepo("spring-boot--kata",
+                "Spring Boot Kata Practices",
+                username);
+        RepositoryStore.add(repoFour);
+
+        assertThat(totalReposOf(username)).isEqualTo(4);
+
+        String searchText = "spring";
+        List<Repository> searchedRepos = RepositoryStore.search(searchText, username);
+
+        assertThat(searchedRepos).hasSize(3);
+        assertThat(searchedRepos).extracting("name")
+                .containsExactlyInAnyOrder("spring-kata", "spring-boot--kata", "java-kata");
+        assertThat(searchedRepos).extracting("description")
+                .containsExactlyInAnyOrder("Spring Kata Practices", "Spring Boot Kata Practices",
+                        "Java Kata Practices for spring developer as well");
 
     }
 
