@@ -135,7 +135,7 @@ public class RepositoryStoreTest extends AbstractUT {
     }
 
     @Test
-    void should_return_list_of_repo_based_on_user_entered_search_text() {
+    void should_return_list_of_repo_if_repo_name_has_that_user_enetred_search_text() {
 
         Username username = Username.of("abhishekmalvadkar");
         Repository repoOne = createRepo("java-kata",

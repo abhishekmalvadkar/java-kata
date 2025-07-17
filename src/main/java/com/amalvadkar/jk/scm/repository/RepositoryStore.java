@@ -80,6 +80,9 @@ public class RepositoryStore {
     }
 
     public static List<Repository> search(String searchText, Username username) {
-        return List.of();
+        List<Repository> userRepos = findReposOf(username);
+        return userRepos.stream()
+                .filter(repo -> repo.name().contains(searchText))
+                .toList();
     }
 }
