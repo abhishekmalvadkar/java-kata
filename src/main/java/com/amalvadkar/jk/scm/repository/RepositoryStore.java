@@ -82,7 +82,12 @@ public class RepositoryStore {
     public static List<Repository> search(String searchText, Username username) {
         List<Repository> userRepos = findReposOf(username);
         return userRepos.stream()
-                .filter(repo -> repo.name().contains(searchText))
+                .filter(ifRepoNameContains(searchText))
                 .toList();
     }
+
+    private static Predicate<Repository> ifRepoNameContains(String searchText) {
+        return repo -> repo.name().contains(searchText);
+    }
+
 }
