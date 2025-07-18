@@ -81,9 +81,21 @@ public class RepositoryStore {
 
     public static List<Repository> search(String searchText, Username username) {
         List<Repository> userRepos = findReposOf(username);
-        return userRepos.stream()
-                .filter(ifRepoNameContains(searchText).or(ifRepoDescriptionContains(searchText)))
-                .toList();
+        if (searchText.contains(" ")) {
+            String[] wordsInSearchText = searchText.split(" ");
+            var searchedRepos = new ArrayList<Repository>();
+            for (String searchedWord : wordsInSearchText) {
+                List<Repository> searchedWordRepoList = userRepos.stream()
+                        .filter(ifRepoNameContains(searchedWord).or(ifRepoDescriptionContains(searchedWord)))
+                        .toList();
+                searchedRepos.addAll(searchedWordRepoList);
+            }
+            return searchedRepos;
+        } else {
+            return userRepos.stream()
+                    .filter(ifRepoNameContains(searchText).or(ifRepoDescriptionContains(searchText)))
+                    .toList();
+        }
     }
 
     private static Predicate<Repository> ifRepoDescriptionContains(String searchText) {
