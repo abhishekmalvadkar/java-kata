@@ -7,4 +7,8 @@ Source Code Management Domain
     [X] Rename existing repo of given user
     [X] Throw exception with message repo does not exists if passed invalid old repo name when renaming existing repo
     [X] Delete repo
->>  [ ] Return repo list based on user entered search text
+    [ ] Search repo from search box
+        [X] If user entered search text is in repo name then that repo should be in result
+        [X] If user entered search text is in repo description then that repo should be in result
+        [X] If user entered multiple words in search text then each word should check against repo match rule if match then that repo should be visible in result
+>>          [ ] Refactoring
