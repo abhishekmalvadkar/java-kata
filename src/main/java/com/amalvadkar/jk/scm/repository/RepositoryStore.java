@@ -81,21 +81,34 @@ public class RepositoryStore {
 
     public static List<Repository> search(String searchText, Username username) {
         List<Repository> userRepos = findReposOf(username);
-        if (searchText.contains(" ")) {
-            String[] wordsInSearchText = searchText.split(" ");
-            var searchedRepos = new ArrayList<Repository>();
-            for (String searchedWord : wordsInSearchText) {
-                List<Repository> searchedWordRepoList = userRepos.stream()
-                        .filter(ifRepoNameContains(searchedWord).or(ifRepoDescriptionContains(searchedWord)))
-                        .toList();
-                searchedRepos.addAll(searchedWordRepoList);
-            }
-            return searchedRepos;
-        } else {
-            return userRepos.stream()
-                    .filter(ifRepoNameContains(searchText).or(ifRepoDescriptionContains(searchText)))
-                    .toList();
+        if (hasMultipleWordsIn(searchText)) {
+            String[] wordsInSearchText = extractWordsFrom(searchText);
+            return searchedReposFromSearchedWords(wordsInSearchText, userRepos);
         }
+        return searchedRepos(searchText, userRepos);
+    }
+
+    private static String[] extractWordsFrom(String searchText) {
+        return searchText.split(" ");
+    }
+
+    private static boolean hasMultipleWordsIn(String searchText) {
+        return searchText.contains(" ");
+    }
+
+    private static List<Repository> searchedReposFromSearchedWords(String[] wordsInSearchText, List<Repository> userRepos) {
+        var searchedRepos = new ArrayList<Repository>();
+        for (String searchedWord : wordsInSearchText) {
+            List<Repository> searchReposForWord = searchedRepos(searchedWord, userRepos);
+            searchedRepos.addAll(searchReposForWord);
+        }
+        return searchedRepos;
+    }
+
+    private static List<Repository> searchedRepos(String searchText, List<Repository> userRepos) {
+        return userRepos.stream()
+                .filter(ifRepoNameContains(searchText).or(ifRepoDescriptionContains(searchText)))
+                .toList();
     }
 
     private static Predicate<Repository> ifRepoDescriptionContains(String searchText) {

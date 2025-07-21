@@ -11,4 +11,4 @@ Source Code Management Domain
         [X] If user entered search text is in repo name then that repo should be in result
         [X] If user entered search text is in repo description then that repo should be in result
         [X] If user entered multiple words in search text then each word should check against repo match rule if match then that repo should be visible in result
->>          [ ] Refactoring
+>>          [X] Refactoring
