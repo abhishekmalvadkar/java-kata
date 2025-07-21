@@ -7,6 +7,9 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
+import static com.amalvadkar.jk.scm.repository.CommonRegex.ANY_NO_OF_WHITE_SPACE;
+import static com.amalvadkar.jk.scm.repository.CommonSymbol.SPACE;
+
 public class RepositoryStore {
 
     private static final Map<Username, List<Repository>> USER_NAME_TO_REPOS_MAP
@@ -89,11 +92,11 @@ public class RepositoryStore {
     }
 
     private static String[] extractWordsFrom(String searchText) {
-        return searchText.split(" ");
+        return searchText.split(ANY_NO_OF_WHITE_SPACE.value());
     }
 
     private static boolean hasMultipleWordsIn(String searchText) {
-        return searchText.contains(" ");
+        return searchText.contains(SPACE.value());
     }
 
     private static List<Repository> searchedReposFromSearchedWords(String[] wordsInSearchText, List<Repository> userRepos) {
