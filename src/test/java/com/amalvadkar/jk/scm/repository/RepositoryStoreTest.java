@@ -285,6 +285,44 @@ public class RepositoryStoreTest extends AbstractUT {
 
     }
 
+    @Test
+    void should_return_list_of_repo_which_has_words_from_search_text_if_searched_text_has_multiple_words__with_many_space_separated_in_between_and_also_many_spaces_in_start_and_end_of_search_text() {
+
+        Username username = Username.of("abhishekmalvadkar");
+        Repository repoOne = createRepo("java-kata",
+                "Java Kata Practices for spring developer as well",
+                username);
+        RepositoryStore.add(repoOne);
+
+        Repository repoTwo = createRepo("sql-kata",
+                "SQL Kata Practices",
+                username);
+        RepositoryStore.add(repoTwo);
+
+        Repository repoThree = createRepo("spring-kata",
+                "Best Kata Practices",
+                username);
+        RepositoryStore.add(repoThree);
+
+        Repository repoFour = createRepo("boot--kata",
+                "Nice Kata Practices",
+                username);
+        RepositoryStore.add(repoFour);
+
+        assertThat(totalReposOf(username)).isEqualTo(4);
+
+        String searchText = "                spring                       boot               ";
+        List<Repository> searchedRepos = RepositoryStore.search(searchText, username);
+
+        assertThat(searchedRepos).hasSize(3);
+        assertThat(searchedRepos).extracting("name")
+                .containsExactlyInAnyOrder("spring-kata", "boot--kata", "java-kata");
+        assertThat(searchedRepos).extracting("description")
+                .containsExactlyInAnyOrder("Nice Kata Practices", "Best Kata Practices",
+                        "Java Kata Practices for spring developer as well");
+
+    }
+
     private static Repository createRepo(String repoName, String repoDescription, Username username) {
         return new Repository(repoName, repoDescription, username);
     }

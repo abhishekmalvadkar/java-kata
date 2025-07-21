@@ -13,3 +13,4 @@ Source Code Management Domain
         [X] If user entered multiple words in search text then each word should check against repo match rule if match then that repo should be visible in result
               [X] Refactoring
         [X] If user entered multiple words in search text with many spaces in the middle then each word should check against repo match rule if match then that repo should be visible in result
+>>      [ ] If user entered multiple words in search text with many spaces in the middle and also many spaces in start and and end of search text then each word should check against repo match rule if match then that repo should be visible in result
