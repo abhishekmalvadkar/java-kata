@@ -10,7 +10,7 @@ import java.util.Optional;
 import static com.amalvadkar.jk.scm.repository.RepositoryStore.findRepoByNameForGivenUsername;
 import static com.amalvadkar.jk.scm.repository.RepositoryStore.totalReposOf;
 import static com.amalvadkar.jk.scm.repository.RepositoryTestBuilder.aRepository;
-import static com.amalvadkar.jk.scm.repository.UserTestBuilder.aUsername;
+import static com.amalvadkar.jk.scm.repository.UsernameTestBuilder.aUsername;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

@@ -1,13 +1,13 @@
 package com.amalvadkar.jk.scm.repository;
 
-public class UserTestBuilder {
+public class UsernameTestBuilder {
     private Username username = Username.of("xyz");
 
-    public static UserTestBuilder aUsername(){
-        return new UserTestBuilder();
+    public static UsernameTestBuilder aUsername(){
+        return new UsernameTestBuilder();
     }
 
-    public UserTestBuilder withUsername(Username username) {
+    public UsernameTestBuilder withUsername(Username username) {
         this.username = username;
         return this;
     }
