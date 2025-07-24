@@ -82,13 +82,13 @@ public class RepositoryStore {
         }
     }
 
-    public static List<Repository> search(String searchText, Username username) {
-        List<Repository> userRepos = findReposOf(username);
-        if (hasMultipleWordsIn(searchText)) {
-            String[] wordsInSearchText = extractWordsFrom(searchText);
+    public static List<Repository> search(SearchRepoInput searchRepoInput) {
+        List<Repository> userRepos = findReposOf(searchRepoInput.username());
+        if (hasMultipleWordsIn(searchRepoInput.searchText())) {
+            String[] wordsInSearchText = extractWordsFrom(searchRepoInput.searchText());
             return searchedReposFromSearchedWords(wordsInSearchText, userRepos);
         }
-        return searchedRepos(searchText, userRepos);
+        return searchedRepos(searchRepoInput.searchText(), userRepos);
     }
 
     private static String[] extractWordsFrom(String searchText) {

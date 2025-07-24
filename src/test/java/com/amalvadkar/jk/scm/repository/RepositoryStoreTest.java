@@ -161,7 +161,7 @@ public class RepositoryStoreTest extends AbstractUT {
         assertThat(totalReposOf(username)).isEqualTo(4);
 
         String searchText = "spring";
-        List<Repository> searchedRepos = RepositoryStore.search(searchText, username);
+        List<Repository> searchedRepos = RepositoryStore.search(new SearchRepoInput(searchText, username));
 
         assertThat(searchedRepos).hasSize(2);
         assertThat(searchedRepos).extracting("name")
@@ -198,7 +198,7 @@ public class RepositoryStoreTest extends AbstractUT {
         assertThat(totalReposOf(username)).isEqualTo(4);
 
         String searchText = "spring";
-        List<Repository> searchedRepos = RepositoryStore.search(searchText, username);
+        List<Repository> searchedRepos = RepositoryStore.search(new SearchRepoInput(searchText, username));
 
         assertThat(searchedRepos).hasSize(3);
         assertThat(searchedRepos).extracting("name")
@@ -236,7 +236,7 @@ public class RepositoryStoreTest extends AbstractUT {
         assertThat(totalReposOf(username)).isEqualTo(4);
 
         String searchText = "spring boot";
-        List<Repository> searchedRepos = RepositoryStore.search(searchText, username);
+        List<Repository> searchedRepos = RepositoryStore.search(new SearchRepoInput(searchText, username));
 
         assertThat(searchedRepos).hasSize(3);
         assertThat(searchedRepos).extracting("name")
@@ -274,7 +274,7 @@ public class RepositoryStoreTest extends AbstractUT {
         assertThat(totalReposOf(username)).isEqualTo(4);
 
         String searchText = "spring                       boot";
-        List<Repository> searchedRepos = RepositoryStore.search(searchText, username);
+        List<Repository> searchedRepos = RepositoryStore.search(new SearchRepoInput(searchText, username));
 
         assertThat(searchedRepos).hasSize(3);
         assertThat(searchedRepos).extracting("name")
@@ -312,7 +312,7 @@ public class RepositoryStoreTest extends AbstractUT {
         assertThat(totalReposOf(username)).isEqualTo(4);
 
         String searchText = "                spring                       boot               ";
-        List<Repository> searchedRepos = RepositoryStore.search(searchText, username);
+        List<Repository> searchedRepos = RepositoryStore.search(new SearchRepoInput(searchText, username));
 
         assertThat(searchedRepos).hasSize(3);
         assertThat(searchedRepos).extracting("name")
