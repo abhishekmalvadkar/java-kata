@@ -1,6 +1,6 @@
 package com.amalvadkar.jk.scm.repository;
 
-import com.amalvadkar.jk.common.AbstractUT;
+import com.amalvadkar.jk.common.AbstractScmTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import static com.amalvadkar.jk.scm.repository.UsernameTestBuilder.aUsername;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class RepositoryStoreTest extends AbstractUT {
+class RepositoryStoreTest extends AbstractScmTest {
 
     @BeforeEach
     void setUp() {

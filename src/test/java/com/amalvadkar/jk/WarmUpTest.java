@@ -1,12 +1,12 @@
 package com.amalvadkar.jk;
 
-import com.amalvadkar.jk.common.AbstractUT;
+import com.amalvadkar.jk.common.AbstractJavaTest;
 import org.junit.jupiter.api.Test;
 
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class WarmUpTest extends AbstractUT {
+public class WarmUpTest extends AbstractJavaTest {
 
     @Test
     void warmUp() {

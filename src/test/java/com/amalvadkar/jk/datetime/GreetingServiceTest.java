@@ -1,6 +1,6 @@
 package com.amalvadkar.jk.datetime;
 
-import com.amalvadkar.jk.common.AbstractUT;
+import com.amalvadkar.jk.common.AbstractJavaTest;
 import org.junit.jupiter.api.Test;
 
 import java.time.Clock;
@@ -9,7 +9,7 @@ import java.time.ZoneId;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GreetingServiceTest extends AbstractUT {
+public class GreetingServiceTest extends AbstractJavaTest {
 
     @Test
     void should_return_good_morning() {
