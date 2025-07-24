@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import static com.amalvadkar.jk.scm.repository.RepositoryStore.findRepoByNameForGivenUsername;
 import static com.amalvadkar.jk.scm.repository.RepositoryStore.totalReposOf;
+import static com.amalvadkar.jk.scm.repository.RepositoryTestBuilder.aRepository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -21,13 +22,10 @@ public class RepositoryStoreTest extends AbstractUT {
 
     @Test
     void should_create_new_repo_for_given_user() {
-        String repoName = "java-kata";
-        String repoDescription = "Java Kata Practices";
-        Username username = Username.of("abhishekmalvadkar");
-        Repository repository = new Repository(repoName, repoDescription, username);
-        RepositoryStore.add(repository);
+        Repository javaKataRepo = aRepository().build();
+        RepositoryStore.add(javaKataRepo);
 
-        long totalRepo = totalReposOf(username);
+        long totalRepo = totalReposOf(javaKataRepo.username());
 
         assertThat(totalRepo).isOne();
     }
@@ -43,78 +41,61 @@ public class RepositoryStoreTest extends AbstractUT {
 
     @Test
     void should_return_repo_by_name_of_user() {
-        String repoName = "java-kata";
-        String repoDescription = "Java Kata Practices";
-        Username username = Username.of("abhishekmalvadkar");
-        Repository repository = new Repository(repoName, repoDescription, username);
-        RepositoryStore.add(repository);
+        Repository javaKataRepo = aRepository().build();
+        RepositoryStore.add(javaKataRepo);
 
-        Optional<Repository> userRepo = findRepoByNameForGivenUsername(repoName, username);
+        Optional<Repository> userRepo = findRepoByNameForGivenUsername(javaKataRepo.name(), javaKataRepo.username());
 
         assertThat(userRepo).isPresent();
         Repository actualRepo = userRepo.get();
-        assertThatRepo(actualRepo, repository);
+        assertThatRepo(actualRepo, javaKataRepo);
     }
 
     @Test
     void should_return_empty_if_asked_repo_username_does_not_have() {
-        String repoName = "java-kata";
-        Username username = Username.of("abhishekmalvadkar");
+        Repository javaKataRepo = aRepository().build();
 
-        Optional<Repository> userRepo = findRepoByNameForGivenUsername(repoName, username);
+        Optional<Repository> userRepo = findRepoByNameForGivenUsername(javaKataRepo.name(), javaKataRepo.username());
 
         assertThat(userRepo).isEmpty();
     }
 
     @Test
     void should_throw_exception_with_message_repo_already_exists_if_user_try_to_create_repo_with_same_name() {
-        String repoName = "java-kata";
-        String repoDescription = "Java Kata Practices";
-        Username username = Username.of("abhishekmalvadkar");
-        Repository repository = new Repository(repoName, repoDescription, username);
-        RepositoryStore.add(repository);
+        Repository javaKataRepo = aRepository().build();
+        RepositoryStore.add(javaKataRepo);
 
-        String anotherRepoName = "java-kata";
-        String anotherRepoDescription = "Java Kata Practices Another";
-        Repository anotherRepo = new Repository(anotherRepoName, anotherRepoDescription, username);
-
-        assertThatThrownBy(() -> RepositoryStore.add(anotherRepo))
+        assertThatThrownBy(() -> RepositoryStore.add(javaKataRepo))
                 .isInstanceOf(RepoAlreadyExistsException.class)
                 .hasMessage("Repo already exists with given name");
 
-        assertThat(totalReposOf(username)).isOne();
+        assertThat(totalReposOf(javaKataRepo.username())).isOne();
 
     }
 
     @Test
     void should_rename_existing_repo() {
-        String repoName = "java-kata";
-        String repoDescription = "Java Kata Practices";
-        Username username = Username.of("abhishekmalvadkar");
-        Repository repository = new Repository(repoName, repoDescription, username);
-        RepositoryStore.add(repository);
+        Repository javaKataRepo = aRepository().build();
+        RepositoryStore.add(javaKataRepo);
 
         String newRepoName = "java-kata-practices";
-        RepositoryStore.rename(repoName, newRepoName, username);
+        RepositoryStore.rename(javaKataRepo.name(), newRepoName, javaKataRepo.username());
 
-        assertThat(findRepoByNameForGivenUsername(repoName, username)).isEmpty();
-        Optional<Repository> renamedRepoOpt = findRepoByNameForGivenUsername(newRepoName, username);
+        assertThat(findRepoByNameForGivenUsername(javaKataRepo.name(), javaKataRepo.username())).isEmpty();
+        Optional<Repository> renamedRepoOpt = findRepoByNameForGivenUsername(newRepoName, javaKataRepo.username());
         assertThat(renamedRepoOpt).isPresent();
-        assertThat(totalReposOf(username)).isOne();
+        assertThat(totalReposOf(javaKataRepo.username())).isOne();
 
     }
 
     @Test
     void should_throw_exception_that_repo_does_not_exists_if_passed_invalid_existing_repo_name_during_rename_existing_repo() {
-        String repoName = "java-kata";
-        String repoDescription = "Java Kata Practices";
-        Username username = Username.of("abhishekmalvadkar");
-        Repository repository = new Repository(repoName, repoDescription, username);
-        RepositoryStore.add(repository);
+        Repository javaKataRepo = aRepository().build();
+        RepositoryStore.add(javaKataRepo);
 
         String newRepoName = "java-kata-practices";
         String existingRepoName = "java-kata-list";
-        assertThatThrownBy(() -> RepositoryStore.rename(existingRepoName, newRepoName, username))
+        assertThatThrownBy(() -> RepositoryStore.rename(existingRepoName, newRepoName, javaKataRepo.username()))
                 .isInstanceOf(RepoDoesNotExistsException.class)
                 .hasMessage("repo does not exists");
 
@@ -122,50 +103,47 @@ public class RepositoryStoreTest extends AbstractUT {
 
     @Test
     void should_delete_repo() {
-        String repoName = "java-kata";
-        String repoDescription = "Java Kata Practices";
-        Username username = Username.of("abhishekmalvadkar");
-        Repository repository = new Repository(repoName, repoDescription, username);
-        RepositoryStore.add(repository);
-        assertThat(totalReposOf(username)).isOne();
+        Repository javaKataRepo = aRepository().build();
+        RepositoryStore.add(javaKataRepo);
+        assertThat(totalReposOf(javaKataRepo.username())).isOne();
 
-        RepositoryStore.delete(repoName, username);
+        RepositoryStore.delete(javaKataRepo.name(), javaKataRepo.username());
 
-        assertThat(totalReposOf(username)).isZero();
+        assertThat(totalReposOf(javaKataRepo.username())).isZero();
     }
 
     @Test
     void should_return_list_of_repo_if_repo_name_has_that_user_entered_search_text() {
 
-        Username username = Username.of("abhishekmalvadkar");
-        Repository repoOne = createRepo("java-kata",
-                "Java Kata Practices",
-                username);
-        RepositoryStore.add(repoOne);
+        Repository javaKataRepo = aRepository().build();
+        RepositoryStore.add(javaKataRepo);
 
-        Repository repoTwo = createRepo("sql-kata",
-                "SQL Kata Practices",
-                username);
-        RepositoryStore.add(repoTwo);
+        Repository sqlKataRepo = aRepository()
+                .withName("sql-kata")
+                .withDescription("SQL Kata Practices")
+                .build();
+        RepositoryStore.add(sqlKataRepo);
 
-        Repository repoThree = createRepo("spring-kata",
-                "Spring Kata Practices",
-                username);
-        RepositoryStore.add(repoThree);
+        Repository springKataRepo = aRepository()
+                .withName("spring-kata")
+                .withDescription("Spring Kata Practices")
+                .build();
+        RepositoryStore.add(springKataRepo);
 
-        Repository repoFour = createRepo("spring-boot--kata",
-                "Spring Boot Kata Practices",
-                username);
-        RepositoryStore.add(repoFour);
+        Repository springBootKataRepo = aRepository()
+                .withName("spring-boot-kata")
+                .withDescription("Spring Boot Kata Practices")
+                .build();
+        RepositoryStore.add(springBootKataRepo);
 
-        assertThat(totalReposOf(username)).isEqualTo(4);
+        assertThat(totalReposOf(javaKataRepo.username())).isEqualTo(4);
 
         String searchText = "spring";
-        List<Repository> searchedRepos = RepositoryStore.search(new SearchRepoInput(searchText, username));
+        List<Repository> searchedRepos = RepositoryStore.search(new SearchRepoInput(searchText, javaKataRepo.username()));
 
         assertThat(searchedRepos).hasSize(2);
         assertThat(searchedRepos).extracting("name")
-                .containsExactlyInAnyOrder("spring-kata", "spring-boot--kata");
+                .containsExactlyInAnyOrder("spring-kata", "spring-boot-kata");
         assertThat(searchedRepos).extracting("description")
                 .containsExactlyInAnyOrder("Spring Kata Practices", "Spring Boot Kata Practices");
 
@@ -174,35 +152,37 @@ public class RepositoryStoreTest extends AbstractUT {
     @Test
     void should_return_list_of_repo_if_repo_description_has_that_user_entered_search_text() {
 
-        Username username = Username.of("abhishekmalvadkar");
-        Repository repoOne = createRepo("java-kata",
-                "Java Kata Practices for spring developer as well",
-                username);
-        RepositoryStore.add(repoOne);
+        Repository javaKataRepo = aRepository()
+                .withDescription("Java Kata Practices for spring developer as well")
+                .build();
+        RepositoryStore.add(javaKataRepo);
 
-        Repository repoTwo = createRepo("sql-kata",
-                "SQL Kata Practices",
-                username);
-        RepositoryStore.add(repoTwo);
+        Repository sqlKataRepo = aRepository()
+                .withName("sql-kata")
+                .withDescription("SQL Kata Practices")
+                .build();
+        RepositoryStore.add(sqlKataRepo);
 
-        Repository repoThree = createRepo("spring-kata",
-                "Spring Kata Practices",
-                username);
-        RepositoryStore.add(repoThree);
+        Repository springKataRepo = aRepository()
+                .withName("spring-kata")
+                .withDescription("Spring Kata Practices")
+                .build();
+        RepositoryStore.add(springKataRepo);
 
-        Repository repoFour = createRepo("spring-boot--kata",
-                "Spring Boot Kata Practices",
-                username);
-        RepositoryStore.add(repoFour);
+        Repository springBootKataRepo = aRepository()
+                .withName("spring-boot-kata")
+                .withDescription("Spring Boot Kata Practices")
+                .build();
+        RepositoryStore.add(springBootKataRepo);
 
-        assertThat(totalReposOf(username)).isEqualTo(4);
+        assertThat(totalReposOf(javaKataRepo.username())).isEqualTo(4);
 
         String searchText = "spring";
-        List<Repository> searchedRepos = RepositoryStore.search(new SearchRepoInput(searchText, username));
+        List<Repository> searchedRepos = RepositoryStore.search(new SearchRepoInput(searchText, javaKataRepo.username()));
 
         assertThat(searchedRepos).hasSize(3);
         assertThat(searchedRepos).extracting("name")
-                .containsExactlyInAnyOrder("spring-kata", "spring-boot--kata", "java-kata");
+                .containsExactlyInAnyOrder("spring-kata", "spring-boot-kata", "java-kata");
         assertThat(searchedRepos).extracting("description")
                 .containsExactlyInAnyOrder("Spring Kata Practices", "Spring Boot Kata Practices",
                         "Java Kata Practices for spring developer as well");
@@ -212,35 +192,37 @@ public class RepositoryStoreTest extends AbstractUT {
     @Test
     void should_return_list_of_repo_which_has_words_from_search_text_if_searched_text_has_multiple_words_space_separated() {
 
-        Username username = Username.of("abhishekmalvadkar");
-        Repository repoOne = createRepo("java-kata",
-                "Java Kata Practices for spring developer as well",
-                username);
-        RepositoryStore.add(repoOne);
+        Repository javaKataRepo = aRepository()
+                .withDescription("Java Kata Practices for spring developer as well")
+                .build();
+        RepositoryStore.add(javaKataRepo);
 
-        Repository repoTwo = createRepo("sql-kata",
-                "SQL Kata Practices",
-                username);
-        RepositoryStore.add(repoTwo);
+        Repository sqlKataRepo = aRepository()
+                .withName("sql-kata")
+                .withDescription("SQL Kata Practices")
+                .build();
+        RepositoryStore.add(sqlKataRepo);
 
-        Repository repoThree = createRepo("spring-kata",
-                "Best Kata Practices",
-                username);
-        RepositoryStore.add(repoThree);
+        Repository springKataRepo = aRepository()
+                .withName("spring-kata")
+                .withDescription("Best Kata Practices")
+                .build();
+        RepositoryStore.add(springKataRepo);
 
-        Repository repoFour = createRepo("boot--kata",
-                "Nice Kata Practices",
-                username);
-        RepositoryStore.add(repoFour);
+        Repository bootKataRepo = aRepository()
+                .withName("boot-kata")
+                .withDescription("Nice Kata Practices")
+                .build();
+        RepositoryStore.add(bootKataRepo);
 
-        assertThat(totalReposOf(username)).isEqualTo(4);
+        assertThat(totalReposOf(javaKataRepo.username())).isEqualTo(4);
 
         String searchText = "spring boot";
-        List<Repository> searchedRepos = RepositoryStore.search(new SearchRepoInput(searchText, username));
+        List<Repository> searchedRepos = RepositoryStore.search(new SearchRepoInput(searchText, javaKataRepo.username()));
 
         assertThat(searchedRepos).hasSize(3);
         assertThat(searchedRepos).extracting("name")
-                .containsExactlyInAnyOrder("spring-kata", "boot--kata", "java-kata");
+                .containsExactlyInAnyOrder("spring-kata", "boot-kata", "java-kata");
         assertThat(searchedRepos).extracting("description")
                 .containsExactlyInAnyOrder("Nice Kata Practices", "Best Kata Practices",
                         "Java Kata Practices for spring developer as well");
@@ -250,35 +232,37 @@ public class RepositoryStoreTest extends AbstractUT {
     @Test
     void should_return_list_of_repo_which_has_words_from_search_text_if_searched_text_has_multiple_words__with_many_space_separated() {
 
-        Username username = Username.of("abhishekmalvadkar");
-        Repository repoOne = createRepo("java-kata",
-                "Java Kata Practices for spring developer as well",
-                username);
-        RepositoryStore.add(repoOne);
+        Repository javaKataRepo = aRepository()
+                .withDescription("Java Kata Practices for spring developer as well")
+                .build();
+        RepositoryStore.add(javaKataRepo);
 
-        Repository repoTwo = createRepo("sql-kata",
-                "SQL Kata Practices",
-                username);
-        RepositoryStore.add(repoTwo);
+        Repository sqlKataRepo = aRepository()
+                .withName("sql-kata")
+                .withDescription("SQL Kata Practices")
+                .build();
+        RepositoryStore.add(sqlKataRepo);
 
-        Repository repoThree = createRepo("spring-kata",
-                "Best Kata Practices",
-                username);
-        RepositoryStore.add(repoThree);
+        Repository springKataRepo = aRepository()
+                .withName("spring-kata")
+                .withDescription("Best Kata Practices")
+                .build();
+        RepositoryStore.add(springKataRepo);
 
-        Repository repoFour = createRepo("boot--kata",
-                "Nice Kata Practices",
-                username);
-        RepositoryStore.add(repoFour);
+        Repository bootKataRepo = aRepository()
+                .withName("boot-kata")
+                .withDescription("Nice Kata Practices")
+                .build();
+        RepositoryStore.add(bootKataRepo);
 
-        assertThat(totalReposOf(username)).isEqualTo(4);
+        assertThat(totalReposOf(javaKataRepo.username())).isEqualTo(4);
 
         String searchText = "spring                       boot";
-        List<Repository> searchedRepos = RepositoryStore.search(new SearchRepoInput(searchText, username));
+        List<Repository> searchedRepos = RepositoryStore.search(new SearchRepoInput(searchText, javaKataRepo.username()));
 
         assertThat(searchedRepos).hasSize(3);
         assertThat(searchedRepos).extracting("name")
-                .containsExactlyInAnyOrder("spring-kata", "boot--kata", "java-kata");
+                .containsExactlyInAnyOrder("spring-kata", "boot-kata", "java-kata");
         assertThat(searchedRepos).extracting("description")
                 .containsExactlyInAnyOrder("Nice Kata Practices", "Best Kata Practices",
                         "Java Kata Practices for spring developer as well");
@@ -288,43 +272,41 @@ public class RepositoryStoreTest extends AbstractUT {
     @Test
     void should_return_list_of_repo_which_has_words_from_search_text_if_searched_text_has_multiple_words__with_many_space_separated_in_between_and_also_many_spaces_in_start_and_end_of_search_text() {
 
-        Username username = Username.of("abhishekmalvadkar");
-        Repository repoOne = createRepo("java-kata",
-                "Java Kata Practices for spring developer as well",
-                username);
-        RepositoryStore.add(repoOne);
+        Repository javaKataRepo = aRepository()
+                .withDescription("Java Kata Practices for spring developer as well")
+                .build();
+        RepositoryStore.add(javaKataRepo);
 
-        Repository repoTwo = createRepo("sql-kata",
-                "SQL Kata Practices",
-                username);
-        RepositoryStore.add(repoTwo);
+        Repository sqlKataRepo = aRepository()
+                .withName("sql-kata")
+                .withDescription("SQL Kata Practices")
+                .build();
+        RepositoryStore.add(sqlKataRepo);
 
-        Repository repoThree = createRepo("spring-kata",
-                "Best Kata Practices",
-                username);
-        RepositoryStore.add(repoThree);
+        Repository springKataRepo = aRepository()
+                .withName("spring-kata")
+                .withDescription("Best Kata Practices")
+                .build();
+        RepositoryStore.add(springKataRepo);
 
-        Repository repoFour = createRepo("boot--kata",
-                "Nice Kata Practices",
-                username);
-        RepositoryStore.add(repoFour);
+        Repository bootKataRepo = aRepository()
+                .withName("boot-kata")
+                .withDescription("Nice Kata Practices")
+                .build();
+        RepositoryStore.add(bootKataRepo);
 
-        assertThat(totalReposOf(username)).isEqualTo(4);
+        assertThat(totalReposOf(javaKataRepo.username())).isEqualTo(4);
 
         String searchText = "                spring                       boot               ";
-        List<Repository> searchedRepos = RepositoryStore.search(new SearchRepoInput(searchText, username));
+        List<Repository> searchedRepos = RepositoryStore.search(new SearchRepoInput(searchText, javaKataRepo.username()));
 
         assertThat(searchedRepos).hasSize(3);
         assertThat(searchedRepos).extracting("name")
-                .containsExactlyInAnyOrder("spring-kata", "boot--kata", "java-kata");
+                .containsExactlyInAnyOrder("spring-kata", "boot-kata", "java-kata");
         assertThat(searchedRepos).extracting("description")
                 .containsExactlyInAnyOrder("Nice Kata Practices", "Best Kata Practices",
                         "Java Kata Practices for spring developer as well");
 
-    }
-
-    private static Repository createRepo(String repoName, String repoDescription, Username username) {
-        return new Repository(repoName, repoDescription, username);
     }
 
     private static void assertThatRepo(Repository actualRepo, Repository expectedRepo) {
