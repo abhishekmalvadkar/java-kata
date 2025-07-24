@@ -7,10 +7,13 @@ Source Code Management Domain
     [X] Rename existing repo of given user
     [X] Throw exception with message repo does not exists if passed invalid old repo name when renaming existing repo
     [X] Delete repo
-    [ ] Search repo from search box
+    [X] Search repo from search box
         [X] If user entered search text is in repo name then that repo should be in result
         [X] If user entered search text is in repo description then that repo should be in result
         [X] If user entered multiple words in search text then each word should check against repo match rule if match then that repo should be visible in result
-              [X] Refactoring
+              [X] Refactor
         [X] If user entered multiple words in search text with many spaces in the middle then each word should check against repo match rule if match then that repo should be visible in result
->>      [ ] If user entered multiple words in search text with many spaces in the middle and also many spaces in start and and end of search text then each word should check against repo match rule if match then that repo should be visible in result
+        [X] If user entered multiple words in search text with many spaces in the middle and also many spaces in start and and end of search text then each word should check against repo match rule if match then that repo should be visible in result
+    [X] Refactor test with Test Data Builder
+    [X] Refactor test with Junit 5 Nested and Tag feature
+
