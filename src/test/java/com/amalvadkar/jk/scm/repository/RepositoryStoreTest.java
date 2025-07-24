@@ -10,6 +10,7 @@ import java.util.Optional;
 import static com.amalvadkar.jk.scm.repository.RepositoryStore.findRepoByNameForGivenUsername;
 import static com.amalvadkar.jk.scm.repository.RepositoryStore.totalReposOf;
 import static com.amalvadkar.jk.scm.repository.RepositoryTestBuilder.aRepository;
+import static com.amalvadkar.jk.scm.repository.UserTestBuilder.aUsername;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -23,16 +24,16 @@ public class RepositoryStoreTest extends AbstractUT {
     @Test
     void should_create_new_repo_for_given_user() {
         Repository javaKataRepo = aRepository().build();
+
         RepositoryStore.add(javaKataRepo);
 
         long totalRepo = totalReposOf(javaKataRepo.username());
-
         assertThat(totalRepo).isOne();
     }
 
     @Test
     void should_return_total_repo_zero_if_user_does_not_have_any_repo() {
-        Username username = Username.of("xyz");
+        Username username = aUsername().build();
 
         long totalRepo = totalReposOf(username);
 
@@ -114,7 +115,6 @@ public class RepositoryStoreTest extends AbstractUT {
 
     @Test
     void should_return_list_of_repo_if_repo_name_has_that_user_entered_search_text() {
-
         Repository javaKataRepo = aRepository().build();
         RepositoryStore.add(javaKataRepo);
 
@@ -151,7 +151,6 @@ public class RepositoryStoreTest extends AbstractUT {
 
     @Test
     void should_return_list_of_repo_if_repo_description_has_that_user_entered_search_text() {
-
         Repository javaKataRepo = aRepository()
                 .withDescription("Java Kata Practices for spring developer as well")
                 .build();
@@ -191,7 +190,6 @@ public class RepositoryStoreTest extends AbstractUT {
 
     @Test
     void should_return_list_of_repo_which_has_words_from_search_text_if_searched_text_has_multiple_words_space_separated() {
-
         Repository javaKataRepo = aRepository()
                 .withDescription("Java Kata Practices for spring developer as well")
                 .build();
@@ -231,7 +229,6 @@ public class RepositoryStoreTest extends AbstractUT {
 
     @Test
     void should_return_list_of_repo_which_has_words_from_search_text_if_searched_text_has_multiple_words__with_many_space_separated() {
-
         Repository javaKataRepo = aRepository()
                 .withDescription("Java Kata Practices for spring developer as well")
                 .build();
@@ -271,7 +268,6 @@ public class RepositoryStoreTest extends AbstractUT {
 
     @Test
     void should_return_list_of_repo_which_has_words_from_search_text_if_searched_text_has_multiple_words__with_many_space_separated_in_between_and_also_many_spaces_in_start_and_end_of_search_text() {
-
         Repository javaKataRepo = aRepository()
                 .withDescription("Java Kata Practices for spring developer as well")
                 .build();
