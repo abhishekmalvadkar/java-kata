@@ -1,4 +1,4 @@
-package com.amalvadkar.jk.datetime;
+package com.amalvadkar.jk.jdk.datetime;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.amalvadkar.jk.datetime;
+package com.amalvadkar.jk.jdk.datetime;
 
 import com.amalvadkar.jk.common.AbstractJavaTest;
 import org.junit.jupiter.api.Test;
